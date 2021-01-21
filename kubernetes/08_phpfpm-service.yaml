@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels: 
+    io.kompose.service: phpfpm
+  name: phpfpm
+spec:
+  ports: 
+  - name: "9000"
+    port: 9000
+    targetPort: 9000
+  - name: "9001"
+    port: 9001
+    targetPort: 9001
+  selector:
+    io.kompose.service: phpfpm
+status:
+  loadBalancer: {}

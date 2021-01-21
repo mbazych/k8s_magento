@@ -1,0 +1,78 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata: 
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: phpfpm
+  name: phpfpm
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels: 
+        io.kompose.service: phpfpm
+    spec:
+      containers:
+      - image: carpio701021/magento2.3-phpfpm
+        name: phpfpm
+        ports:
+        - containerPort: 9000
+        - containerPort: 9001
+        env:
+        - name: BASE_URL
+          value: "10.87.240.1"
+        - name: DB_HOST
+          value: "10.154.224.3"
+        - name: DB_NAME
+          value: "magento"
+        - name: DB_USER
+          value: "mbazych"
+        - name: DB_PASSWORD
+          value: "aei()_gh8iwa09edhuj"
+        - name: ADMIN_FIRSTNAME
+          value: "Michał"
+        - name: ADMIN_LASTNAME
+          value: "Bazych"
+        - name: ADMIN_EMAIL
+          value: "bazych.michal@gmail.com"
+        - name: ADMIN_USER
+          value: "mbazych"
+        - name: ADMIN_PASSWORD
+          value: "Magento123"
+        - name: SESSION_REDIS_HOST
+          value: "redis-service" #don't change it!
+        - name: CACHE_REDIS_HOST
+          value: "redis-service" #don't change it!
+        - name: CACHE_REDIS_PORT
+          value: "6379"
+        - name: RABBITMQ_HOSTNAME
+          value: "rabbit-service" #don't change it!
+        - name: RABBITMQ_PORT
+          value: "5672"
+        - name: RABBITMQ_USER
+          value: "admin"
+        - name: RABBITMQ_PASSWORD
+          value: "admin"
+        - name: RABBITMQ_VIRTUALHOST
+          value: "/"
+        resources: {}
+       volumeMounts:
+        - mountPath: /var/www/html
+          name: appdata
+        securityContext:
+          allowPrivilegeEscalation: true
+      restartPolicy: Always
+      volumes:
+      - name: appdata
+        persistentVolumeClaim:
+          claimName: appdata
+      securityContext:
+          runAsUser: 1000
+          fsGroup: 1000
+status: {}
